@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3dcbc40e-9134-4615-be10-6278f5a81560" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/readingJSON/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/readingJSON/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/readingJSON/readingJSON.go" beforeDir="false" afterPath="$PROJECT_DIR$/readingJSON/readingJSON.go" afterDir="false" />
     </list>
@@ -21,7 +19,7 @@
             <entry file="file://$PROJECT_DIR$/readingJSON/readingJSON.go">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="375">
-                  <caret line="94" column="18" selection-start-line="94" selection-start-column="18" selection-end-line="94" selection-end-column="18" />
+                  <caret line="96" column="18" selection-start-line="96" selection-start-column="18" selection-end-line="96" selection-end-column="18" />
                   <folding>
                     <element signature="e#14#67#0" expanded="true" />
                   </folding>
@@ -32,8 +30,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/readingJSON/main.go">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="840">
-                  <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+                <state relative-caret-position="408">
+                  <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
                   <folding>
                     <element signature="e#14#92#0" expanded="true" />
                   </folding>
@@ -44,7 +42,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/readingJSON/swagger.json">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="642">
+                <state relative-caret-position="517">
                   <caret line="29" column="40" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="40" />
                 </state>
               </provider>
@@ -57,8 +55,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/readingJSON/readingJSON.go">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="907">
-                  <caret line="103" column="126" selection-start-line="103" selection-start-column="126" selection-end-line="103" selection-end-column="126" />
+                <state relative-caret-position="240">
+                  <caret line="10" column="27" lean-forward="true" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
                   <folding>
                     <element signature="e#14#113#0" expanded="true" />
                   </folding>
@@ -81,13 +79,13 @@
     <findStrings>
       <find>fmt.p</find>
       <find>stat</find>
-      <find>api.host</find>
       <find>api.Ho</find>
       <find>getdatamet</find>
       <find>fmt</find>
       <find>multi</find>
       <find>.call</find>
       <find>Add(</find>
+      <find>api.host</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/go" />
@@ -188,8 +186,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.1336207" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1336207" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -351,27 +350,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/readingJSON/swagger.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
+        <state relative-caret-position="517">
           <caret line="29" column="40" selection-start-line="29" selection-start-column="21" selection-end-line="29" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/readingJSON/readingJSON.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="94" column="18" selection-start-line="94" selection-start-column="18" selection-end-line="94" selection-end-column="18" />
-          <folding>
-            <element signature="e#14#67#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/readingJSON/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="840">
-          <caret line="35" column="22" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
+        <state relative-caret-position="408">
+          <caret line="17" column="30" lean-forward="true" selection-start-line="17" selection-start-column="30" selection-end-line="17" selection-end-column="30" />
           <folding>
             <element signature="e#14#92#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/readingJSON/readingJSON.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="10" column="27" lean-forward="true" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+          <folding>
+            <element signature="e#14#113#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -21,7 +21,7 @@ func handlerAPI(c *gin.Context) {
 	timeout := time.Duration(10 * time.Second)
 	client := http.Client{Timeout: timeout}
 	defer body.Close()
-	request, err := http.NewRequest(method, "http://localhost:8080"+endpoint, body)
+	request, err := http.NewRequest(method, "localhost:8080/"+endpoint, body)
 	if err != nil {
 		log.Fatal(err)
 	}
