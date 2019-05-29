@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	. "github.com/dave/jennifer/jen"
 	"io/ioutil"
 	"strings"
@@ -83,7 +82,6 @@ func main () {
 		}
 		group.Id("router").Dot("Run").Call(Lit(":80"))
 	})
-	fmt.Println(pathParam.Method[0].MethodType)
 	f.Func().Id("handlerAPI").Params(Id("c").Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context")).BlockFunc(func(group *Group) {
 		group.Id("body").Op(":=").Id("c").Dot("Request").Dot("Body")
 		group.Id("header").Op(":=").Id("c").Dot("Request").Dot("Header")
