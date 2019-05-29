@@ -69,6 +69,9 @@ func main () {
 	//Порт
 	api.Host = m["host"].(string)
 	api.BasePath = m["basePath"].(string)
+	if api.BasePath == "/" {
+		api.BasePath = ""
+	}
 
 
 	// MAKING API.go
@@ -89,11 +92,11 @@ func main () {
 		group.Id("endpoint").Op(":=").Id("c").Dot("Request").Dot("RequestURI")
 
 		group.Id("timeout").Op(":=").Qual("time", "Duration").Call(Id("10").Op("*").Qual("time", "Second"))
-		group.Id("client").Op(":=").Qual("http", "Client").Values(Dict {
+		group.Id("client").Op(":=").Qual("net/http", "Client").Values(Dict {
 			Id("Timeout"): Id("timeout"),
 		})
 		group.Defer().Id("body").Dot("Close").Call()
-		group.List(Id("request"), Id("err")).Op(":=").Qual("http", "NewRequest").Call(Id("method"),Add(Lit(api.Host+api.BasePath)).Add(Op("+")).Id("endpoint"), Id("body"))
+		group.List(Id("request"), Id("err")).Op(":=").Qual("net/http", "NewRequest").Call(Id("method"),Add(Lit("http://"+ api.Host+api.BasePath)).Add(Op("+")).Id("endpoint"), Id("body"))
 		group.If(
 			Id("err").Op("!=").Id("nil").Block(
 				Qual("log","Fatal").Call(Id("err")),
@@ -108,7 +111,7 @@ func main () {
 		)
 		group.Defer().Id("response").Dot("Body").Dot("Close").Call()
 
-		group.List(Id("bodyResp"), Id("err")).Op(":=").Qual("ioutil", "ReadAll").Call(Id("response").Dot("Body"))
+		group.List(Id("bodyResp"), Id("err")).Op(":=").Qual("io/ioutil", "ReadAll").Call(Id("response").Dot("Body"))
 		group.If(
 			Id("err").Op("!=").Id("nil").Block(
 				Qual("log","Fatal").Call(Id("err")),
