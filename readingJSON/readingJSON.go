@@ -5,7 +5,6 @@ import (
 	"fmt"
 	. "github.com/dave/jennifer/jen"
 	"io/ioutil"
-	"log"
 	"strings"
 )
 
@@ -30,6 +29,7 @@ type OneMethodParam struct {
 	TypeParam interface{}
 	Name interface{}
 }
+var ifMethodType MethodParameters
 func main () {
 	file, _ := ioutil.ReadFile("swagger.json")
 	var api APIparameters
@@ -74,6 +74,9 @@ func main () {
 
 	importLib := map[string]string{
 		"github.com/gin-gonic/gin": "gin",
+		"io/ioutil": "ioutil",
+		"log": "log",
+		"net/http": "net/http",
 	}
 
 	f := NewFile("main")
@@ -84,27 +87,49 @@ func main () {
 		for  i := 0; i < len(api.PathParam); i++ {
 			group.Id("router").Dot(api.PathParam[i].Method[i].MethodType).Call(Lit(api.PathParam[i].Path), Id("handlerAPI"))
 		}
-		group.Id("router").Dot("Run").Call(Lit(":1234"))
+		group.Id("router").Dot("Run").Call(Lit(":80"))
 	})
-
+	fmt.Println(pathParam.Method[0].MethodType)
 	f.Func().Id("handlerAPI").Params(Id("c").Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context")).BlockFunc(func(group *Group) {
-		for k := range pathParam.Method {
-			if pathParam.Method[k].MethodType == "post" {
-				for i := range pathParam.Method[k].MethodConsumes {
-					if pathParam.Method[k].MethodConsumes[i] == "multipart/form-data" {
+		group.Id("body").Op(":=").Id("c").Dot("Request").Dot("Body")
+		group.Id("header").Op(":=").Id("c").Dot("Request").Dot("Header")
+		group.Id("method").Op(":=").Id("c").Dot("Request").Dot("Method")
+		group.Id("endpoint").Op(":=").Id("c").Dot("Request").Dot("RequestURI")
 
-					}
-				}
-			} else if pathParam.Method[k].MethodType == "GET" {
-				fmt.Println("GET", pathParam.Method[k].MethodConsumes)
-			}
-		}
+		group.Id("timeout").Op(":=").Id("time").Dot("Duration").Call(Id("10").Op("*").Id("time").Dot("Second"))
+		group.Id("client").Op(":=").Id("http").Dot("Client").Values(Dict {
+			Id("Timeout"): Id("timeout"),
+		})
+		group.Defer().Id("body").Dot("Close").Call()
+		group.List(Id("request"), Id("err")).Op(":=").Id("http").Dot("NewRequest").Call(Id("method"),Add(Lit("http://localhost"+api.Host)).Add(Op("+")).Id("endpoint"), Id("body"))
+		group.If(
+			Id("err").Op("!=").Id("nil").Block(
+				Id("log").Dot("Fatal").Call(Id("err")),
+			),
+		)
+		group.Id("request").Dot("Header").Op("=").Id("header")
+		group.List(Id("response"), Id("err")).Op(":=").Id("client").Dot("Do").Call(Id("request"))
+		group.If(
+			Id("err").Op("!=").Id("nil").Block(
+				Id("log").Dot("Fatal").Call(Id("err")),
+			),
+		)
+		group.Defer().Id("response").Dot("Body").Dot("Close").Call()
+
+		group.List(Id("bodyResp"), Id("err")).Op(":=").Id("ioutil").Dot("ReadAll").Call(Id("response").Dot("Body"))
+		group.If(
+			Id("err").Op("!=").Id("nil").Block(
+				Id("log").Dot("Fatal").Call(Id("err")),
+			),
+		)
+		group.Id("log").Dot("Println").Call(String().Call(Id("bodyResp")))
 	})
 
 
 
 	err := f.Save("main.go")
 	if err != nil {
-		log.Fatal("Eror on saving", err)
+		fmt.Println(err)
+		Continue()
 	}
 }

@@ -10,32 +10,30 @@ import (
 
 func main() {
 	router := gin.Default()
-	router.POST("/asd/deployment/create", handlerAPI)
+	router.POST("/deployment/create", handlerAPI)
 	router.Run(":80")
 }
 func handlerAPI(c *gin.Context) {
 	body := c.Request.Body
 	header := c.Request.Header
+	method := c.Request.Method
+	endpoint := c.Request.RequestURI
 	timeout := time.Duration(10 * time.Second)
-	client := http.Client{
-		Timeout:timeout,
-	}
+	client := http.Client{Timeout: timeout}
 	defer body.Close()
-	request, err := http.NewRequest("POST", "http://localhost:8080/deployment/create", body)
+	request, err := http.NewRequest(method, "http://localhost:8080"+endpoint, body)
 	if err != nil {
 		log.Fatal(err)
 	}
 	request.Header = header
-
 	response, err := client.Do(request)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	defer response.Body.Close()
-
 	bodyResp, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		log.Fatalln(err)
+		log.Fatal(err)
 	}
 	log.Println(string(bodyResp))
 }
