@@ -63,9 +63,12 @@ func main () {
 		api.PathParam = append(api.PathParam, pathParam)
 	}
 	//Авторизация
-	for k := range m["securityDefinitions"].(map[string]interface{}) {
-		api.Security = k
+	if m["securityDefinitions"] != nil {
+		for k := range m["securityDefinitions"].(map[string]interface{}) {
+			api.Security = k
+		}
 	}
+
 	//Порт
 	api.Host = m["host"].(string)
 	api.BasePath = m["basePath"].(string)
