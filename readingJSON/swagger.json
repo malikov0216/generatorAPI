@@ -1,0 +1,90 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Serves changing in diagram and upload/update it in GitHub",
+        "title": "Camunda Modeller GitHub",
+        "termsOfService": "http://halykbank.kz",
+        "contact": {
+            "name": "Nartay Dembayev",
+            "url": "http://instagram.com/nartaymalikov",
+            "email": "mastaok02@gmail.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/deployment/create": {
+            "post": {
+                "security": [
+                    {
+                        "BasicAuth": []
+                    }
+                ],
+                "description": "Serves changing in diagram and upload/update it in GitHub",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Camunda Modeller",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Repository name",
+                        "name": "deployment-name",
+                        "in": "formData"
+                    },
+                    {
+                        "type": "file",
+                        "description": "Camunda Modeller",
+                        "name": "diagram_1.bpmn",
+                        "in": "formData"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "answer",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "headers": {
+                            "string": {
+                                "type": "string",
+                                "description": "Header"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "ok",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
+}
