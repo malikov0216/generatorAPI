@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	. "github.com/dave/jennifer/jen"
 	"io/ioutil"
+	"log"
 	"strings"
 )
 
@@ -31,6 +32,7 @@ type OneMethodParam struct {
 }
 
 func main () {
+	//Загружаем swagger.json файл документации
 	file, _ := ioutil.ReadFile("swagger.json")
 	var api APIparameters
 	var pathParam pathParameters
@@ -62,25 +64,28 @@ func main () {
 
 		api.PathParam = append(api.PathParam, pathParam)
 	}
-	//Авторизация
+	//Проверка Авторизации
 	if m["securityDefinitions"] != nil {
 		for k := range m["securityDefinitions"].(map[string]interface{}) {
 			api.Security = k
 		}
 	}
 
-	//Порт
+	//Ссылка "localhost"
 	api.Host = m["host"].(string)
+
+	//Базовый endpoint
 	api.BasePath = m["basePath"].(string)
 	if api.BasePath == "/" {
 		api.BasePath = ""
 	}
 
 
-	// MAKING API.go
 
+	//Генерация API
 	f := NewFile("main")
 
+	//func main
 	f.Func().Id("main").Params().BlockFunc(func(group *Group) {
 		group.Id("router").Op(":=").Qual("github.com/gin-gonic/gin", "Default").Call()
 		for  i := 0; i < len(api.PathParam); i++ {
@@ -88,6 +93,8 @@ func main () {
 		}
 		group.Id("router").Dot("Run").Call(Lit(":80"))
 	})
+
+	//func handlerAPI
 	f.Func().Id("handlerAPI").Params(Id("c").Add(Op("*")).Qual("github.com/gin-gonic/gin", "Context")).BlockFunc(func(group *Group) {
 		group.Id("body").Op(":=").Id("c").Dot("Request").Dot("Body")
 		group.Id("header").Op(":=").Id("c").Dot("Request").Dot("Header")
@@ -102,14 +109,20 @@ func main () {
 		group.List(Id("request"), Id("err")).Op(":=").Qual("net/http", "NewRequest").Call(Id("method"),Add(Lit("http://"+ api.Host+api.BasePath)).Add(Op("+")).Id("endpoint"), Id("body"))
 		group.If(
 			Id("err").Op("!=").Id("nil").Block(
-				Qual("log","Fatal").Call(Id("err")),
+				Id("c").Dot("JSON").Call(List(Id("404"), Qual("github.com/gin-gonic/gin", "H").Values(Dict{
+					Lit("error"): Id("err"),
+				}))),
+				Return(),
 			),
 		)
 		group.Id("request").Dot("Header").Op("=").Id("header")
 		group.List(Id("response"), Id("err")).Op(":=").Id("client").Dot("Do").Call(Id("request"))
 		group.If(
 			Id("err").Op("!=").Id("nil").Block(
-				Qual("log","Fatal").Call(Id("err")),
+				Id("c").Dot("JSON").Call(List(Id("404"), Qual("github.com/gin-gonic/gin", "H").Values(Dict{
+					Lit("error"): Id("err"),
+				}))),
+				Return(),
 			),
 		)
 		group.Defer().Id("response").Dot("Body").Dot("Close").Call()
@@ -117,16 +130,21 @@ func main () {
 		group.List(Id("bodyResp"), Id("err")).Op(":=").Qual("io/ioutil", "ReadAll").Call(Id("response").Dot("Body"))
 		group.If(
 			Id("err").Op("!=").Id("nil").Block(
-				Qual("log","Fatal").Call(Id("err")),
+				Id("c").Dot("JSON").Call(List(Id("500"), Qual("github.com/gin-gonic/gin", "H").Values(Dict{
+					Lit("error"): Id("err"),
+				}))),
+				Return(),
 			),
 		)
-		group.Qual("log", "Println").Call(String().Call(Id("bodyResp")))
+		group.Id("c").Dot("JSON").Call(List(Id("200"), Qual("github.com/gin-gonic/gin", "H").Values(Dict{
+			Lit("result"): String().Call(Id("bodyResp")),
+		})))
 	})
 
 
-
-	err := f.Save("main.go")
+	//Сохраняем API под названием generatedAPI
+	err := f.Save("generatedAPI.go")
 	if err != nil {
-		Qual("log", "Println").Call(Id("err"))
+		log.Fatalln(err)
 	}
 }
