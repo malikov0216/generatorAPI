@@ -35,5 +35,7 @@ func handlerAPI(c *gin.Context) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(string(bodyResp))
+	c.JSON(200, gin.H{
+		"result": string(bodyResp),
+	})
 }
